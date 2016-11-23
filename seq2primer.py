@@ -20,9 +20,10 @@ def get_opt_cloningprimer_pair(seq):
     ## max_nn_length : longest seq length for primer Tm analysis
     primerF_list = []
     primerR_list = []
-    for i in range(16,22):
+    for i in range(16,25):
         primerF = seq[0:i]
-        primerR = kang.rev_comp(seq[-i-3:-3]) # stop codon excluded
+        #primerR = kang.rev_comp(seq[-i-3:-3]) # stop codon excluded
+        primerR = kang.rev_comp(seq[-i:]) # stop codon included
         if 56 <= oligo_calc.calcTm(primerF) <= 63:
             primerF_list.append(primerF)
         else:
@@ -50,4 +51,5 @@ def get_opt_cloningprimer_pair(seq):
 
 with open(Outfile,'w') as f:
     for key in dicFa:
-        print(key,'\t'.join(map(str,get_opt_cloningprimer_pair(dicFa[key]))),sep='\t',file=f)
+        seqlen = len(dicFa[key])
+        print(key,seqlen,'\t'.join(map(str,get_opt_cloningprimer_pair(dicFa[key]))),sep='\t',file=f)
